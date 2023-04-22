@@ -1,8 +1,8 @@
 //BOARD AND OTHER EQUIPMENT
-let moveupY = 0, gravity = 0.5, score = 0, gameover = false,paused = false, pipesfuncId, animationfuncId, started = false;
+let moveupY = 0, gravity = 0.5, score = 0, gameover = false, pipesfuncId, animationfuncId, started = false;
 let presssart = "Press SPACE to start";
 let board = document.querySelector("#board");
-let context = board.getContext("2d");
+let context;
 let bird = {
     x: window.innerWidth / 6,
     y: window.innerHeight / 3,
@@ -17,7 +17,7 @@ pipetopImage.src = "./images/pipetop.png";
 pipebottomImage.src = "./images/pipebottom.png";
 //PIPE
 let pipes = [];
-let pipeheight = 580
+let pipeheight = (window.innerHeight * 2)/3;
 class Pipe {
     x = window.innerWidth;
     y = 0;
@@ -32,21 +32,26 @@ class Pipe {
     }
 }
 
-
+window.onresize =() => {UpdateWindow()}
 window.onload = function () {
     board = UpdateWindow();
 
     context.fillStyle = "white";
-    context.font = "50px Calibri";
-    context.fillText(presssart, window.innerWidth / 3 + 100, window.innerHeight / 2 - 50);
-
+    context.font = "25px Calibri";
+    textWidth = context.measureText(presssart).width;
+    context.fillText(GetTranslated(presssart), board.width/2 - textWidth/1.35, window.innerHeight / 2 - 50);
+    
     context.drawImage(birdImage, bird.x, bird.y, bird.width, bird.height);
 
     document.addEventListener("keypress", moveFlappy);
 }
 
 function animate() {
-    if (gameover) return;
+    if (gameover) {
+        StopExecution();
+        GameOvered();
+        return;
+    }
     animationfuncId = requestAnimationFrame(animate);
 
     context.clearRect(0, 0, board.width, board.height);
@@ -85,7 +90,7 @@ function animate() {
 
 function setPipes() {
     let randomPosY = Math.random() * (pipeheight / 2) - pipeheight / 2;
-    let openspace = board.height / 4.5;
+    let openspace = board.height / 4.3;
 
     let topPipe = new Pipe(window.innerWidth, randomPosY, pipetopImage);
     pipes.push(topPipe);
@@ -115,16 +120,35 @@ function moveFlappy(e) {
 function UpdateWindow() {
     board.height = window.innerHeight;
     board.width = window.innerWidth;
+    context = board.getContext("2d");
     return board;
 }
 function StartExecution() {
     started = true;
-    pipesfuncId = setInterval(setPipes, 4000);
+    pipesfuncId = setInterval(setPipes, 3000);
     requestAnimationFrame(animate);
+    setInterval(ResetSession,3000);
+    document.addEventListener("keypress", moveFlappy);
 }
 function StopExecution(){
     clearInterval(pipesfuncId);
     cancelAnimationFrame(animationfuncId);
     document.removeEventListener("keypress", moveFlappy);
+}
+function ResetSession(){
+    StopExecution();
+    context.clearRect(0, 0, board.width, board.height);
+    gameover = false;
+    started = false;
+    bird.x = window.innerWidth / 6;
+    bird.y = window.innerHeight / 3;
+
+    context.fillStyle = "white";
+    context.font = "25px Calibri";
+    textWidth = context.measureText(presssart).width;
+    context.fillText(GetTranslated(presssart), board.width/2 - textWidth/1.35, window.innerHeight / 2 - 50);
+    context.drawImage(birdImage, bird.x, bird.y, bird.width, bird.height);
+    
+    score = 0;
 }
 
