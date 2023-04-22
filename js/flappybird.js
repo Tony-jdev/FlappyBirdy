@@ -1,5 +1,6 @@
 //BOARD AND OTHER EQUIPMENT
-let pipeheight = 580, moveupY = 0, gravity = 0.5, score = 0, gameover = false;
+let moveupY = 0, gravity = 0.5, score = 0, gameover = false,paused = false, pipesfuncId, animationfuncId, started = false;
+let presssart = "Press SPACE to start";
 let board = document.querySelector("#board");
 let context = board.getContext("2d");
 let bird = {
@@ -14,7 +15,9 @@ const birdImage = new Image(), pipetopImage = new Image(), pipebottomImage = new
 birdImage.src = bird.imgsrc;
 pipetopImage.src = "./images/pipetop.png";
 pipebottomImage.src = "./images/pipebottom.png";
-
+//PIPE
+let pipes = [];
+let pipeheight = 580
 class Pipe {
     x = window.innerWidth;
     y = 0;
@@ -28,26 +31,28 @@ class Pipe {
         this.img = img;
     }
 }
-let pipes = [];
+
 
 window.onload = function () {
     board = UpdateWindow();
 
+    context.fillStyle = "white";
+    context.font = "50px Calibri";
+    context.fillText(presssart, window.innerWidth / 3 + 100, window.innerHeight / 2 - 50);
+
     context.drawImage(birdImage, bird.x, bird.y, bird.width, bird.height);
 
-    StartExecution();
+    document.addEventListener("keypress", moveFlappy);
 }
 
 function animate() {
-    requestAnimationFrame(animate);
-
     if (gameover) return;
+    animationfuncId = requestAnimationFrame(animate);
 
     context.clearRect(0, 0, board.width, board.height);
     moveupY -= gravity;
     bird.y -= moveupY;
 
-    console.log(board.height);
     if (bird.y > board.height) {
         gameover = true;
         context.clearRect(0, 0, board.width, board.height);
@@ -88,7 +93,7 @@ function setPipes() {
     let bottomPipe = new Pipe(window.innerWidth, randomPosY + pipeheight + openspace, pipebottomImage);
     pipes.push(bottomPipe);
 
-    while (pipes.length > 0 && pipes[0].x - 100 < 0) {
+    while (pipes.length > 0 && pipes[0].x + 100 < 0) {
         pipes.shift();
     }
 }
@@ -100,7 +105,10 @@ function detectTouch(bird, pipe) {
 }
 
 function moveFlappy(e) {
-    if (e.code == "Space") moveupY = 10;
+    if (e.code == "Space"){
+        if(!started)StartExecution();
+        moveupY = 10;
+    } 
 }
 
 //Preset functions
@@ -110,8 +118,13 @@ function UpdateWindow() {
     return board;
 }
 function StartExecution() {
-    document.addEventListener("keypress", moveFlappy);
-    setInterval(setPipes, 2900);
+    started = true;
+    pipesfuncId = setInterval(setPipes, 4000);
     requestAnimationFrame(animate);
+}
+function StopExecution(){
+    clearInterval(pipesfuncId);
+    cancelAnimationFrame(animationfuncId);
+    document.removeEventListener("keypress", moveFlappy);
 }
 
