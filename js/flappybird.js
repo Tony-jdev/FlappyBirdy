@@ -8,7 +8,7 @@ let bird = {
     y: window.innerHeight / 3,
     width: 68,
     height: 44,
-    imgsrc: "./images/flappybird.png"
+    imgsrc: "./images/BirdSkins/flappybird.png"
 }
 //IMAGES 
 const birdImage = new Image(), pipetopImage = new Image(), pipebottomImage = new Image();
@@ -32,7 +32,10 @@ class Pipe {
     }
 }
 
-window.onresize =() => {UpdateWindow()}
+window.onresize =() => {
+    UpdateWindow();
+    context.drawImage(birdImage, bird.x, bird.y, bird.width, bird.height);
+}
 window.onload = function () {
     board = UpdateWindow();
 
@@ -127,7 +130,6 @@ function StartExecution() {
     started = true;
     pipesfuncId = setInterval(setPipes, 3000);
     requestAnimationFrame(animate);
-    setInterval(ResetSession,3000);
     document.addEventListener("keypress", moveFlappy);
 }
 function StopExecution(){
@@ -148,7 +150,10 @@ function ResetSession(){
     textWidth = context.measureText(presssart).width;
     context.fillText(GetTranslated(presssart), board.width/2 - textWidth/1.35, window.innerHeight / 2 - 50);
     context.drawImage(birdImage, bird.x, bird.y, bird.width, bird.height);
-    
+
     score = 0;
+
+    document.addEventListener("keypress", moveFlappy);
 }
+
 
