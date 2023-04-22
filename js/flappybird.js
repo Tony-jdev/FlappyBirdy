@@ -140,6 +140,7 @@ function StopExecution(){
 function ResetSession(){
     StopExecution();
     context.clearRect(0, 0, board.width, board.height);
+    pipes = [];
     gameover = false;
     started = false;
     bird.x = window.innerWidth / 6;
