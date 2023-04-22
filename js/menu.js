@@ -52,7 +52,7 @@ function GameOvered()
     mainDiv.className = "menu-bar jc";
     resDiv.className = "game-over";
     let res = printResults(score, 'res-h');
-    let restart_b = createButton(GetTranslated("Restart"), "b in r", ResetSession);
+    let restart_b = createButton(GetTranslated("Restart"), "b in r", ()=>{ResetSession(); ClearMenu();});
     resDiv.appendChild(res);
     resDiv.appendChild(restart_b);
     mainDiv.appendChild(resDiv);
@@ -84,7 +84,8 @@ function Settings(){
     mns.appendChild(mainDiv);
 }
 function Mods(){
-GameOvered();
+
+    
 }
 function Exit()
 {
