@@ -1,7 +1,28 @@
+let languages = ["Ukrainian", "English"];
+let ThisLng = languages[0];
 
+var audio = new Audio('music/Default.mp3');
+let AudioOn = false;
 
+let wordsSet = {
+    "Play":"Грати",
+    "Settings":"Налаштування",
+    "Mods":"Моди",
+    "Exit":"Вихід",
+    "Menu":"Меню",
+    "Back":"Назад",
+    "Music":"Музика",
+    "Language":"Мова",
+    "Restart":"Спробувати ще",
+    "Sc☺re":"Рахун☺к",
+    "Game over":"Кінець гри"
+}
+
+let menu_bat_wisible = true;
 
 function openMenu(e){
+    //menu_bat_wisible = false;
+    //UpdateShowMenuButton();
     ClearMenu();
     let mns = document.querySelector("#menues");
     let mainDiv = document.createElement('div');
@@ -16,35 +37,69 @@ function openMenu(e){
     mns.appendChild(mainDiv);
 }
 
-function PlayAudio()
+function PreGameLoad(){
+
+}
+function GameOvered()
 {
-    var audio = new Audio('audio_file.mp3');
-    audio.play();
-    
+    //menu_bat_wisible = false;
+    //UpdateShowMenuButton();
+    ClearMenu();
+    let mns = document.querySelector("#menues");
+    let mainDiv = document.createElement('div');
+    let resDiv = document.createElement('div');
+    mainDiv.className = "menu-bar jc";
+    resDiv.className = "game-over";
+    let res = printResults(score, 'res-h');
+    let restart_b = createButton(GetTranslated("Restart"), "b in r", ()=>{return;});
+    resDiv.appendChild(res);
+    resDiv.appendChild(restart_b);
+    mainDiv.appendChild(resDiv);
+    mns.appendChild(mainDiv);
+    score = 0;
 }
 
 function Play(){
+    //menu_bat_wisible = true;
+   // UpdateShowMenuButton();
     ClearMenu();
 }
 
-let languages = ["Ukrainian", "English"];
-let wordsSet = {
-    "Play":"Грати",
-    "Settings":"Налаштування",
-    "Mods":"Моди",
-    "Exit":"Вихід",
-    "Menu":"Меню",
-    "Back":"Назад",
-    "Music":"Музика",
-    "Language":"Мова"
+function Settings(){
+    ClearMenu();
+    let mns = document.querySelector("#menues");
+    let mainDiv = document.createElement('div');
+    mainDiv.className = "menu-bar";
+
+    let music = createCheckBox( GetTranslated("Music"), "cbd", ChangeAudio);
+    let languagesDiv = createSelect(GetTranslated("Language"), "sd", languages, ChangeLng, ThisLng, "Language");
+    let back = createButton(GetTranslated("Back"),"b in",openMenu);
+
+    mainDiv.appendChild(music);
+    mainDiv.appendChild(languagesDiv);
+    mainDiv.appendChild(back);
+
+    mns.appendChild(mainDiv);
+}
+function Mods(){
+GameOvered();
+}
+function Exit()
+{
+    window.close();
 }
 
-let ThisLng = languages[0];
+//other
+function ChangeAudio()
+{
+    AudioOn = !AudioOn;
+    AudioOn ? audio.play() : audio.pause();
+}
 
 function ChangeLng()
 {
     ThisLng = document.querySelector("#Language").value;
-    UpdateMenuButton();
+    //UpdateMenuButton();
     ClearMenu();
     Settings();
 }
@@ -69,30 +124,13 @@ function GetTranslated(english_variant)
     return "Default( " + english_variant + " )";
 }
 
-function Settings(){
-    ClearMenu();
-    let mns = document.querySelector("#menues");
-    let mainDiv = document.createElement('div');
-    mainDiv.className = "menu-bar";
-
-    let music = createCheckBox( GetTranslated("Music"), "cbd");
-    let languagesDiv = createSelect(GetTranslated("Language"), "sd", languages, ChangeLng, ThisLng, "Language");
-    let back = createButton(GetTranslated("Back"),"b in",openMenu);
-
-    mainDiv.appendChild(music);
-    mainDiv.appendChild(languagesDiv);
-    mainDiv.appendChild(back);
-
-    mns.appendChild(mainDiv);
-}
-function Mods(){
-
-}
-function Exit()
-{
-    window.close();
-}
 function ClearMenu()
 {
     document.querySelector('#menues').innerHTML = "";
+}
+function UpdateShowMenuButton()
+{
+    menu_bat_wisible ?
+    document.querySelector('.ba.menu').style.opacity = 1 :
+    document.querySelector('.ba.menu').style.opacity = 0
 }

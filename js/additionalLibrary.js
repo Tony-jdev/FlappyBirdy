@@ -92,3 +92,30 @@ function createCheckBox(labelName, divClass)
     m_div.appendChild(checkbox);
     return m_div;
 }
+function createCheckBox(labelName, divClass, ChangeFunc)
+{
+    let m_div = document.createElement('div');
+    m_div.className = divClass;
+    let lb = document.createElement('label');
+    lb.htmlFor = labelName;
+    lb.innerHTML = labelName;
+    let checkbox = document.createElement('input');
+    checkbox.onchange = ChangeFunc;
+    checkbox.name = labelName;
+    checkbox.type = "checkbox";
+    checkbox.checked = false;
+    m_div.appendChild(lb);
+    m_div.appendChild(checkbox);
+    return m_div;
+}
+function printResults(score, h_class)
+{
+    let m_div = document.createElement('div');
+    let h = document.createElement('h3');
+    h.innerHTML = GetTranslated("Game over")+"<br/>"+GetTranslated("Sc☺re") + ": "+score;
+    h.className = h_class;
+    m_div.appendChild(document.createElement('hr'));
+    m_div.appendChild(h);
+    m_div.appendChild(document.createElement('hr'));
+    return m_div;
+}
