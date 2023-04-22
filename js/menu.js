@@ -1,3 +1,4 @@
+//Set Up
 let languages = ["Ukrainian", "English"];
 let ThisLng = languages[0];
 
@@ -15,14 +16,17 @@ let wordsSet = {
     "Language":"Мова",
     "Restart":"Спробувати ще",
     "Sc☺re":"Рахун☺к",
-    "Game over":"Кінець гри"
+    "Game over":"Кінець гри",
+    "Press SPACE to start":"Нажміть SPACE для старту"
 }
 
 let menu_bat_wisible = true;
 
+//Menu functions
 function openMenu(e){
     //menu_bat_wisible = false;
     //UpdateShowMenuButton();
+    StopExecution();
     ClearMenu();
     let mns = document.querySelector("#menues");
     let mainDiv = document.createElement('div');
@@ -37,9 +41,6 @@ function openMenu(e){
     mns.appendChild(mainDiv);
 }
 
-function PreGameLoad(){
-
-}
 function GameOvered()
 {
     //menu_bat_wisible = false;
@@ -51,7 +52,7 @@ function GameOvered()
     mainDiv.className = "menu-bar jc";
     resDiv.className = "game-over";
     let res = printResults(score, 'res-h');
-    let restart_b = createButton(GetTranslated("Restart"), "b in r", ()=>{return;});
+    let restart_b = createButton(GetTranslated("Restart"), "b in r", ResetSession);
     resDiv.appendChild(res);
     resDiv.appendChild(restart_b);
     mainDiv.appendChild(resDiv);
@@ -62,7 +63,8 @@ function GameOvered()
 function Play(){
     //menu_bat_wisible = true;
    // UpdateShowMenuButton();
-    ClearMenu();
+   ClearMenu();
+   StartExecution();
 }
 
 function Settings(){
