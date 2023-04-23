@@ -17,15 +17,15 @@ let wordsSet = {
     "Restart":"Спробувати ще",
     "Sc☺re":"Рахун☺к",
     "Game over":"Кінець гри",
-    "Press SPACE to start":"Нажміть SPACE для старту"
+    "Click to start":"Нажміть для старту"
 }
 
 let menu_bat_wisible = true;
 
+
+
 //Menu functions
 function openMenu(e){
-    //menu_bat_wisible = false;
-    //UpdateShowMenuButton();
     StopExecution();
     ClearMenu();
     let mns = document.querySelector("#menues");
@@ -43,8 +43,6 @@ function openMenu(e){
 
 function GameOvered()
 {
-    //menu_bat_wisible = false;
-    //UpdateShowMenuButton();
     ClearMenu();
     let mns = document.querySelector("#menues");
     let mainDiv = document.createElement('div');
@@ -61,8 +59,6 @@ function GameOvered()
 }
 
 function Play(){
-    //menu_bat_wisible = true;
-   // UpdateShowMenuButton();
    ClearMenu();
    StartExecution();
 }
@@ -74,17 +70,73 @@ function Settings(){
     mainDiv.className = "menu-bar";
 
     let music = createCheckBox( GetTranslated("Music"), "cbd", ChangeAudio);
+    let sounds = createCheckBox( GetTranslated("Sounds"), "cbd", OfSounds);
     let languagesDiv = createSelect(GetTranslated("Language"), "sd", languages, ChangeLng, ThisLng, "Language");
     let back = createButton(GetTranslated("Back"),"b in",openMenu);
 
     mainDiv.appendChild(music);
+    mainDiv.appendChild(sounds);
     mainDiv.appendChild(languagesDiv);
     mainDiv.appendChild(back);
 
     mns.appendChild(mainDiv);
 }
-function Mods(){
 
+function Mods(){
+    ClearMenu();
+    let mns = document.querySelector("#menues");
+    let mainDiv = document.createElement('div');
+    let imgs_div = document.createElement('div');
+    let elems_div = document.createElement('div');
+
+    imgs_div.className = "img-div";
+    elems_div.className = "img-div";
+
+    mainDiv.className = "menu-bar c";
+
+    let list = [
+        "images/pipebottom.png",
+        "images/pipetop.png",
+        "images/pipebottom.png",
+        "images/pipetop.png",
+        "images/pipebottom.png",
+        "images/pipetop.png",
+        "images/BirdSkins/flappybird.png"
+    ]
+    let list_els = [
+        "Background",
+        "Bird",
+        "TopPipe",
+        "BottomPipe"
+    ]
+    let list_vs = [
+        backgroundImage.src,
+        birdImage.src,
+        pipetopImage.src,
+        pipebottomImage.src
+    ]
+
+    let obj_list = [];
+    for (const i of list) {
+        const img = createObjDiv(i, "image");
+        obj_list.push(imgs_div.appendChild(img));
+    }
+    for (const i of obj_list) {
+        i.onclick = ()=>{UpdateClass("image","image s", i, "selected", obj_list);}
+    }
+
+    let obj_list2 = [];
+    for (let i = 0; i < list_els.length; i++) {
+        const img = createObjDivT(list_vs[i], "image p", list_els[i]);
+        obj_list2.push(elems_div.appendChild(img));
+    }
+    for (const i of obj_list2) {
+        i.onclick = ()=>{UpdateClass("image p","image s", i, "selected", obj_list2);}
+    }
+
+    mainDiv.appendChild(elems_div);
+    mainDiv.appendChild(imgs_div);
+    mns.appendChild(mainDiv);
     
 }
 function Exit()
@@ -102,7 +154,7 @@ function ChangeAudio()
 function ChangeLng()
 {
     ThisLng = document.querySelector("#Language").value;
-    //UpdateMenuButton();
+    UpdateMenuButton();
     ClearMenu();
     Settings();
 }
@@ -130,10 +182,4 @@ function GetTranslated(english_variant)
 function ClearMenu()
 {
     document.querySelector('#menues').innerHTML = "";
-}
-function UpdateShowMenuButton()
-{
-    menu_bat_wisible ?
-    document.querySelector('.ba.menu').style.opacity = 1 :
-    document.querySelector('.ba.menu').style.opacity = 0
 }

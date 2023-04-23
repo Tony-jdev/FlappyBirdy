@@ -46,6 +46,9 @@ canvas{
 .menu-bar.jc{
     justify-content: space-around;
 }
+.menu-bar.c{
+    flex-direction: row;
+}
 
 .b{
     margin: 20px;
@@ -129,4 +132,47 @@ canvas{
     text-align: center;
     text-decoration: overline;
     text-decoration: underline;
+}
+
+.img-div{
+    width: 15%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    background-color: aqua;
+    overflow: auto;
+    border-radius: 10px;
+    box-shadow: 1px 5px 5px 1px #000;
+}
+.image{
+    background-color: #000;
+    justify-self: center;
+    width: 50%;
+    height: 150px;
+    display: flex;
+    border-radius: 10px;
+    box-shadow: 1px 5px 5px 1px #000;
+    display: inline;
+}
+.image>img{
+    width: 150px;
+    height: 150px;
+    border-radius: 10px;
+}
+.image.p>p{
+    color: azure;
+    font-weight: bolder;
+    text-align: center;
+}
+.image.s
+{
+    color: azure;
+    border: 3px solid royalblue;
+}
+.image:hover
+{
+    border: 3px solid royalblue;
+    transform: scale(1.2);
+    transition: border 0.5s ease-in;
 }

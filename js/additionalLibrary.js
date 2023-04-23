@@ -119,3 +119,62 @@ function printResults(score, h_class)
     m_div.appendChild(document.createElement('hr'));
     return m_div;
 }
+function createObjDiv(src, div_class)
+{
+    let m_div = document.createElement('div');
+    m_div.className = div_class;
+    let i = document.createElement('img');
+    i.src = src;
+    m_div.appendChild(i);
+    return m_div;
+}
+function createObjDiv(src, div_class, selectFunc)
+{
+    let m_div = document.createElement('div');
+    m_div.className = div_class;
+    m_div.onclick = selectFunc;
+    let i = document.createElement('img');
+    i.src = src;
+    m_div.appendChild(i);
+    return m_div;
+}
+function createObjDivT(src, div_class, text)
+{
+    let m_div = document.createElement('div');
+    m_div.className = div_class;
+    let i = document.createElement('img');
+    let t = document.createElement('p');
+    i.src = src;
+    t.innerHTML = text;
+    m_div.appendChild(i);
+    m_div.appendChild(t);
+    return m_div;
+}
+function UpdateClass(new_class, obj)
+{
+    obj.className = new_class;
+}
+function UpdateClass(new_class, obj, id)
+{
+    obj.className = new_class;
+    obj.id = id;
+}
+function UpdateClass(old_class, new_class, obj, id, list)
+{
+    throwDown(list, old_class);
+    obj.className = new_class;
+    obj.id = id;
+}
+function throwDown(list_obj)
+{
+    for (const i of list_obj) {
+        i.id = '';
+    }
+}
+function throwDown(list_obj, default_cl)
+{
+    for (const i of list_obj) {
+        i.id = '';
+        i.className = default_cl;
+    }
+}
