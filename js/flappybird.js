@@ -1,6 +1,11 @@
+//SOUNDS
+const s_score = new Audio();
+s_score.src = "./music/s_point.wav";
+const s_hit = new Audio();
+s_hit.src = "./music/s_hit.wav";
 //BOARD AND OTHER EQUIPMENT
-let moveupY = 0, gravity = 0.5, score = 0, gameover = false, pipesfuncId, animationfuncId, started = false;
-let presssart = "Press SPACE to start";
+let moveupY = 0, gravity = 0.5, score = 0, gameover = false, pipesfuncId, animationfuncId, started = false, soundon = true;
+let presssart = "Click to start";
 let board = document.querySelector("#board");
 let context;
 let bird = {
@@ -11,13 +16,13 @@ let bird = {
     imgsrc: "./images/BirdSkins/flappybird.png"
 }
 //IMAGES 
-const birdImage = new Image(), pipetopImage = new Image(), pipebottomImage = new Image();
+const birdImage = new Image(), pipetopImage = new Image(), pipebottomImage = new Image(), backgroundImage = new Image();
 birdImage.src = bird.imgsrc;
 pipetopImage.src = "./images/pipetop.png";
 pipebottomImage.src = "./images/pipebottom.png";
 //PIPE
 let pipes = [];
-let pipeheight = (window.innerHeight * 2)/3;
+let pipeheight = (window.innerHeight * 2) / 3;
 class Pipe {
     x = window.innerWidth;
     y = 0;
@@ -32,9 +37,13 @@ class Pipe {
     }
 }
 
-window.onresize =() => {
+window.onresize = () => {
     UpdateWindow();
-    context.drawImage(birdImage, bird.x, bird.y, bird.width, bird.height);
+    if (!started) {
+        context.drawImage(birdImage, bird.x, bird.y, bird.width, bird.height);
+        context.font = "25px Calibri";
+        context.fillText(GetTranslated(presssart), board.width / 2 - textWidth / 1.35, window.innerHeight / 2 - 50);
+    }
 }
 window.onload = function () {
     board = UpdateWindow();
@@ -42,14 +51,26 @@ window.onload = function () {
     context.fillStyle = "white";
     context.font = "25px Calibri";
     textWidth = context.measureText(presssart).width;
-    context.fillText(GetTranslated(presssart), board.width/2 - textWidth/1.35, window.innerHeight / 2 - 50);
-    
+    context.fillText(GetTranslated(presssart), board.width / 2 - textWidth / 1.35, window.innerHeight / 2 - 50);
+
     context.drawImage(birdImage, bird.x, bird.y, bird.width, bird.height);
 
-    document.addEventListener("keypress", moveFlappy);
+    board.addEventListener("click", moveFlappy);
 }
+document.addEventListener("visibilitychange", function (event) {
+    openMenu();
+});
+document.addEventListener("keypress", function (e) {
+    if(e.code == "Space"){
+        moveFlappy();
+    }
+    else {
+        openMenu();
+    }
+});
 
 function animate() {
+
     if (gameover) {
         StopExecution();
         GameOvered();
@@ -64,29 +85,31 @@ function animate() {
     if (bird.y > board.height) {
         gameover = true;
         context.clearRect(0, 0, board.width, board.height);
+        if (soundon) s_hit.play();
     }
 
     context.drawImage(birdImage, bird.x, bird.y, bird.width, bird.height);
 
     for (let i = 0; i < pipes.length; i++) {
         let pipe = pipes[i];
-        pipe.x -= 2.5;
+        pipe.x -= 2.7;
         context.drawImage(pipe.img, pipe.x, pipe.y, pipe.width, pipe.height);
 
         if (!pipe.passed && bird.x > pipe.x + pipe.width) {
             pipe.passed = true;
             score += 0.5;
+            if (soundon) s_score.play();
         }
 
         if (detectTouch(bird, pipe)) {
             gameover = true;
             context.clearRect(0, 0, board.width, board.height);
             context.drawImage(birdImage, bird.x, bird.y, bird.width, bird.height);
+            if (soundon) s_hit.play();
             return;
         }
     }
 
-    context.fillStyle = "white";
     context.font = "50px Calibri";
     context.fillText(score, 5, 45);
 }
@@ -113,10 +136,8 @@ function detectTouch(bird, pipe) {
 }
 
 function moveFlappy(e) {
-    if (e.code == "Space"){
-        if(!started)StartExecution();
-        moveupY = 10;
-    } 
+    if (!started) StartExecution();
+    moveupY = 11;
 }
 
 //Preset functions
@@ -124,20 +145,21 @@ function UpdateWindow() {
     board.height = window.innerHeight;
     board.width = window.innerWidth;
     context = board.getContext("2d");
+    context.fillStyle = "white";
     return board;
 }
 function StartExecution() {
     started = true;
     pipesfuncId = setInterval(setPipes, 3000);
     requestAnimationFrame(animate);
-    document.addEventListener("keypress", moveFlappy);
+    board.addEventListener("click", moveFlappy);
 }
-function StopExecution(){
+function StopExecution() {
     clearInterval(pipesfuncId);
     cancelAnimationFrame(animationfuncId);
-    document.removeEventListener("keypress", moveFlappy);
+    board.removeEventListener("click", moveFlappy);
 }
-function ResetSession(){
+function ResetSession() {
     StopExecution();
     context.clearRect(0, 0, board.width, board.height);
     pipes = [];
@@ -146,15 +168,19 @@ function ResetSession(){
     bird.x = window.innerWidth / 6;
     bird.y = window.innerHeight / 3;
 
-    context.fillStyle = "white";
     context.font = "25px Calibri";
     textWidth = context.measureText(presssart).width;
-    context.fillText(GetTranslated(presssart), board.width/2 - textWidth/1.35, window.innerHeight / 2 - 50);
+    context.fillText(GetTranslated(presssart), board.width / 2 - textWidth / 1.35, window.innerHeight / 2 - 50);
     context.drawImage(birdImage, bird.x, bird.y, bird.width, bird.height);
 
     score = 0;
 
-    document.addEventListener("keypress", moveFlappy);
+    board.addEventListener("click", moveFlappy);
 }
-
+function OffSound() {
+    soundon = false;
+}
+function OnSound() {
+    soundon = true;
+}
 
