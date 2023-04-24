@@ -47,7 +47,8 @@ canvas{
     justify-content: space-around;
 }
 .menu-bar.c{
-    flex-direction: row;
+    flex-direction: column;
+    justify-content: space-around;
 }
 
 .b{
@@ -135,44 +136,42 @@ canvas{
 }
 
 .img-div{
-    width: 15%;
-    height: auto;
     display: flex;
-    flex-direction: column;
-    justify-content: space-around;
+    height:auto;
+    flex-direction: row;
+    margin: 1%;
     background-color: aqua;
     overflow: auto;
     border-radius: 10px;
     box-shadow: 1px 5px 5px 1px #000;
 }
 .image{
+    margin: 1%;
+    width:fit-content;
+    height:fit-content;
     background-color: #000;
-    justify-self: center;
-    width: 50%;
-    height: 150px;
-    display: flex;
     border-radius: 10px;
     box-shadow: 1px 5px 5px 1px #000;
-    display: inline;
+    text-align: center;
 }
-.image>img{
-    width: 150px;
-    height: 150px;
-    border-radius: 10px;
-}
-.image.p>p{
+.image>p{
     color: azure;
     font-weight: bolder;
-    text-align: center;
+}
+.image>img{
+    display: inline-block;
+    width: 10rem;
+    height: 10rem;
+    border-radius: 5px;
 }
 .image.s
 {
-    color: azure;
+    color: rgb(0, 255, 255);
     border: 3px solid royalblue;
 }
 .image:hover
 {
     border: 3px solid royalblue;
-    transform: scale(1.2);
+    transform: scale(1.05);
     transition: border 0.5s ease-in;
 }
