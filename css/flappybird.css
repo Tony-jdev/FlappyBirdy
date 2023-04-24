@@ -180,9 +180,10 @@ canvas{
 }
 .swl{
     padding: 10px;
-    color: aliceblue;
+    color: beige;
+    font-size: x-large;
     align-self: center;
     background-color:rgb(0, 136, 136);
-    border-radius: 20px;
+    border-radius: 5px;
     box-shadow: 1px 5px 5px 1px #000;
 }

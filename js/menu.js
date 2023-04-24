@@ -79,7 +79,7 @@ function Settings(){
     let back = createButton(GetTranslated("Back"),"b in",openMenu);
     let s_volume = createSoundVolumeChanger('swl',GetTranslated("Sound volume"),"sw", ()=>{
         changeVolume(audio, parseFloat(document.querySelector('#sw').value));
-    })
+    }, audio.volume*100);
 
     mainDiv.appendChild(music);
     mainDiv.appendChild(sounds);
@@ -277,5 +277,5 @@ function getFileNamesFromFolder(folderPath, regex) {
   {
     let v = value/100;
     audio.volume = v;
-    changeVolume(v);
+    ChangeVolume(v);
   }
