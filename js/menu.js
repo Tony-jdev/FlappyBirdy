@@ -85,7 +85,7 @@ function Settings(){
     mns.appendChild(mainDiv);
 }
 
-function Mods(){
+async function Mods(){
     ClearMenu();
     let mns = document.querySelector("#menues");
     let mainDiv = document.createElement('div');
@@ -95,35 +95,48 @@ function Mods(){
 
     imgs_div.className = "img-div";
     elems_div.className = "img-div";
-    bts_div.className = "img-div";
-
+    bts_div.className = "img-div c";
     mainDiv.className = "menu-bar c";
 
     let list = [];
-    getFileNamesFromFolder("images", regex).then((value) => {
-        for (const it of value) {
-            list.push(it);
-        }
-    });
 
+    try
+    {
+        const value = await getFileNamesFromFolder("images", regex) 
+        {
+            for (const it of value) {
+                list.push(it);
+            }
+        };
+    }
+    catch(error)
+    {
+        console.log(error);
+    }
+    
     let list_els = [
         "Background",
         "Bird",
         "TopPipe",
         "BottomPipe"
     ]
+   
+    var img = document.getElementById('board'),
+    style = img.currentStyle || window.getComputedStyle(img, false),
+    bi = style.backgroundImage.slice(4, -1).replace(/"/g, "");
     let list_vs = [
-        document.querySelector('canvas').backgroundImage,
+        bi,
         birdImage.src,
         pipetopImage.src,
         pipebottomImage.src
     ]
 
     let obj_list = [];
-    for (const i of list) {
+    for (let i of list) {
         const img = createObjDiv(i, "image");
         obj_list.push(imgs_div.appendChild(img));
     }
+
     for (const i of obj_list) {
         i.onclick = ()=>{UpdateClass("image","image s", i, "selected", obj_list);}
     }
@@ -221,7 +234,7 @@ function ChangeImgs(list_f, list_s)
     {
         switch(f.children[1].innerHTML)
         {
-            case "Background": document.querySelector('canvas').backgroundImage = url(s.children[0].src); break;
+            case "Background": document.querySelector('#board').style.backgroundImage = 'url('+s.children[0].src+')'; break;
             case "Bird": birdImage.src = s.children[0].src; break;
             case "TopPipe": pipetopImage.src = s.children[0].src; break;
             case "BottomPipe": pipebottomImage.src = s.children[0].src; break;
@@ -231,6 +244,8 @@ function ChangeImgs(list_f, list_s)
     }
 
 }
+
+let testL = [];
 
 function getFileNamesFromFolder(folderPath, regex) {
     return new Promise((resolve, reject) => {
@@ -242,6 +257,7 @@ function getFileNamesFromFolder(folderPath, regex) {
             if (val.match(regex)) {
               fileNames.push(val);
             }
+            testL = fileNames;
           });
           resolve(fileNames);
         },
