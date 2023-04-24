@@ -19,7 +19,8 @@ let wordsSet = {
     "Sc☺re":"Рахун☺к",
     "Game over":"Кінець гри",
     "Click to start":"Нажміть для старту",
-    "Change":"Змінити"
+    "Change":"Змінити",
+    "Sound volume":"Гучність"
 }
 
 let menu_bat_wisible = true;
@@ -76,9 +77,13 @@ function Settings(){
     let sounds = createCheckBox( GetTranslated("Sounds"), "cbd", SwitchSound, true);
     let languagesDiv = createSelect(GetTranslated("Language"), "sd", languages, ChangeLng, ThisLng, "Language");
     let back = createButton(GetTranslated("Back"),"b in",openMenu);
+    let s_volume = createSoundVolumeChanger('swl',GetTranslated("Sound volume"),"sw", ()=>{
+        changeVolume(audio, parseFloat(document.querySelector('#sw').value));
+    })
 
     mainDiv.appendChild(music);
     mainDiv.appendChild(sounds);
+    mainDiv.appendChild(s_volume);
     mainDiv.appendChild(languagesDiv);
     mainDiv.appendChild(back);
 
@@ -266,4 +271,11 @@ function getFileNamesFromFolder(folderPath, regex) {
         }
       });
     });
+  }
+
+  function changeVolume(audio, value)
+  {
+    let v = value/100;
+    audio.volume = v;
+    changeVolume(v);
   }
