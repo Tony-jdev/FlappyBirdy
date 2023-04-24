@@ -36,7 +36,7 @@ class Pipe {
         this.img = img;
     }
 }
-
+//WINDOW FUNCTIONS
 window.onresize = () => {
     UpdateWindow();
     if (!started) {
@@ -73,9 +73,8 @@ document.addEventListener("keypress", function (e) {
         StartExecution();
     }
 });
-
+//GAME FUNCTIONS
 function animate() {
-
     if (gameover) {
         StopExecution();
         GameOvered();
@@ -121,7 +120,7 @@ function animate() {
 
 function setPipes() {
     let randomPosY = Math.random() * (pipeheight / 2) - pipeheight / 2;
-    let openspace = board.height / 4.3;
+    let openspace = board.height / 4.1;
 
     let topPipe = new Pipe(window.innerWidth, randomPosY, pipetopImage);
     pipes.push(topPipe);
@@ -185,10 +184,12 @@ function ResetSession() {
 
     board.addEventListener("click", moveFlappy);
 }
+
 function SwitchSound() {
     soundon = !soundon;
 }
-function PaintBackground(){
-    context.drawImage(backgroundImage, 0, 0, board.width, board.height);
+function ChangeVolume(volume){
+    s_hit.volume = volume;
+    s_score.volume = volume;
 }
 
