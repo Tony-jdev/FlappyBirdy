@@ -68,9 +68,12 @@ document.addEventListener("keypress", function (e) {
     else if(!paused){
         openMenu();
     }
-    else if(paused){
+    else if(paused && started){
         ClearMenu();
         StartExecution();
+    }else if(paused){
+        paused = false;
+        ClearMenu();
     }
 });
 //GAME FUNCTIONS
