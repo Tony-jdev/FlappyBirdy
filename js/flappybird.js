@@ -4,7 +4,7 @@ s_score.src = "./music/s_point.wav";
 const s_hit = new Audio();
 s_hit.src = "./music/s_hit.wav";
 //BOARD AND OTHER EQUIPMENT
-let moveupY = 0, gravity = 0.5, score = 0, gameover = false, pipesfuncId, animationfuncId, started = false, soundon = true;
+let moveupY = 0, gravity = 0.5, score = 0, gameover = false, pipesfuncId, animationfuncId, started = false, soundon = true, paused = false;
 let presssart = "Click to start";
 let board = document.querySelector("#board");
 let context;
@@ -13,10 +13,10 @@ let bird = {
     y: window.innerHeight / 3,
     width: 68,
     height: 44,
-    imgsrc: "./images/BirdSkins/flappybird.png"
+    imgsrc: "./images/flappybird.png"
 }
 //IMAGES 
-const birdImage = new Image(), pipetopImage = new Image(), pipebottomImage = new Image(), backgroundImage = new Image();
+const birdImage = new Image(), pipetopImage = new Image(), pipebottomImage = new Image();
 birdImage.src = bird.imgsrc;
 pipetopImage.src = "./images/pipetop.png";
 pipebottomImage.src = "./images/pipebottom.png";
@@ -61,7 +61,7 @@ document.addEventListener("visibilitychange", function (event) {
     openMenu();
 });
 document.addEventListener("keypress", function (e) {
-    if(e.code == "Space"){
+    if(e.code == "Space" && !paused){
         moveFlappy();
     }
     else {
@@ -150,11 +150,13 @@ function UpdateWindow() {
 }
 function StartExecution() {
     started = true;
+    paused = false;
     pipesfuncId = setInterval(setPipes, 3000);
     requestAnimationFrame(animate);
     board.addEventListener("click", moveFlappy);
 }
 function StopExecution() {
+    paused = true;
     clearInterval(pipesfuncId);
     cancelAnimationFrame(animationfuncId);
     board.removeEventListener("click", moveFlappy);
@@ -165,6 +167,7 @@ function ResetSession() {
     pipes = [];
     gameover = false;
     started = false;
+    paused = false;
     bird.x = window.innerWidth / 6;
     bird.y = window.innerHeight / 3;
 
@@ -177,10 +180,7 @@ function ResetSession() {
 
     board.addEventListener("click", moveFlappy);
 }
-function OffSound() {
-    soundon = false;
-}
-function OnSound() {
-    soundon = true;
+function SwitchSound() {
+    soundon = !soundon;
 }
 
