@@ -194,7 +194,7 @@ function throwDown(list_obj, default_cl)
         i.className = default_cl;
     }
 }
-function createSoundVolumeChanger(div_class, labelN, id, changeFunc)
+function createSoundVolumeChanger(div_class, labelN, id, changeFunc, vl)
 {
     let m_div = document.createElement('div');
     m_div.className = div_class;
@@ -205,7 +205,7 @@ function createSoundVolumeChanger(div_class, labelN, id, changeFunc)
     range.onchange = changeFunc;
     range.name = labelN;
     range.type = "range";
-    range.value = 50;
+    range.value = vl;
     range.min = 0;
     range.max = 100;
     range.step = 1;
