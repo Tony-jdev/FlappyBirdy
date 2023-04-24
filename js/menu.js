@@ -13,15 +13,18 @@ let wordsSet = {
     "Menu":"Меню",
     "Back":"Назад",
     "Music":"Музика",
+    "Sounds":"Звуки",
     "Language":"Мова",
     "Restart":"Спробувати ще",
     "Sc☺re":"Рахун☺к",
     "Game over":"Кінець гри",
-    "Click to start":"Нажміть для старту"
+    "Click to start":"Нажміть для старту",
+    "Change":"Змінити"
 }
 
 let menu_bat_wisible = true;
 
+const regex = /\.jpe?g|png|gif$/i;
 
 
 //Menu functions
@@ -70,7 +73,7 @@ function Settings(){
     mainDiv.className = "menu-bar";
 
     let music = createCheckBox( GetTranslated("Music"), "cbd", ChangeAudio);
-    let sounds = createCheckBox( GetTranslated("Sounds"), "cbd", OfSounds);
+    let sounds = createCheckBox( GetTranslated("Sounds"), "cbd", SwitchSound, true);
     let languagesDiv = createSelect(GetTranslated("Language"), "sd", languages, ChangeLng, ThisLng, "Language");
     let back = createButton(GetTranslated("Back"),"b in",openMenu);
 
@@ -88,21 +91,21 @@ function Mods(){
     let mainDiv = document.createElement('div');
     let imgs_div = document.createElement('div');
     let elems_div = document.createElement('div');
+    let bts_div = document.createElement('div');
 
     imgs_div.className = "img-div";
     elems_div.className = "img-div";
+    bts_div.className = "img-div";
 
     mainDiv.className = "menu-bar c";
 
-    let list = [
-        "images/pipebottom.png",
-        "images/pipetop.png",
-        "images/pipebottom.png",
-        "images/pipetop.png",
-        "images/pipebottom.png",
-        "images/pipetop.png",
-        "images/BirdSkins/flappybird.png"
-    ]
+    let list = [];
+    getFileNamesFromFolder("images", regex).then((value) => {
+        for (const it of value) {
+            list.push(it);
+        }
+    });
+
     let list_els = [
         "Background",
         "Bird",
@@ -110,7 +113,7 @@ function Mods(){
         "BottomPipe"
     ]
     let list_vs = [
-        backgroundImage.src,
+        document.querySelector('canvas').backgroundImage,
         birdImage.src,
         pipetopImage.src,
         pipebottomImage.src
@@ -127,14 +130,25 @@ function Mods(){
 
     let obj_list2 = [];
     for (let i = 0; i < list_els.length; i++) {
-        const img = createObjDivT(list_vs[i], "image p", list_els[i]);
+        const img = createObjDivT(list_vs[i], "image", list_els[i]);
         obj_list2.push(elems_div.appendChild(img));
     }
     for (const i of obj_list2) {
-        i.onclick = ()=>{UpdateClass("image p","image s", i, "selected", obj_list2);}
+        i.onclick = ()=>{UpdateClass("image","image s", i, "selected", obj_list2);}
     }
 
+    let b_change;
+    if(!started)
+    {
+        b_change = createButton(GetTranslated("Change"), "b in", ()=>{ChangeImgs(obj_list2, obj_list);});
+        bts_div.appendChild(b_change);
+    }
+
+    let b_esc = createButton(GetTranslated("Back"), "b in", openMenu);
+    bts_div.appendChild(b_esc);
+
     mainDiv.appendChild(elems_div);
+    mainDiv.appendChild(bts_div);
     mainDiv.appendChild(imgs_div);
     mns.appendChild(mainDiv);
     
@@ -183,3 +197,57 @@ function ClearMenu()
 {
     document.querySelector('#menues').innerHTML = "";
 }
+
+function ChangeImgs(list_f, list_s)
+{
+    let f = "Non";
+    let s = "Non";
+
+    for (const i of list_f) {
+        if(i.id === "selected")
+        {
+            f = i;
+            break;
+        }
+    }
+    for (const i of list_s) {
+        if(i.id === "selected")
+        {
+            s = i;
+            break;
+        }
+    }
+    if(f !== "Non" && s !== "Non")
+    {
+        switch(f.children[1].innerHTML)
+        {
+            case "Background": document.querySelector('canvas').backgroundImage = url(s.children[0].src); break;
+            case "Bird": birdImage.src = s.children[0].src; break;
+            case "TopPipe": pipetopImage.src = s.children[0].src; break;
+            case "BottomPipe": pipebottomImage.src = s.children[0].src; break;
+        }
+        ClearMenu();
+        Mods();
+    }
+
+}
+
+function getFileNamesFromFolder(folderPath, regex) {
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: folderPath,
+        success: function(data) {
+          const fileNames = [];
+          $(data).find('a').attr('href', function(i, val) {
+            if (val.match(regex)) {
+              fileNames.push(val);
+            }
+          });
+          resolve(fileNames);
+        },
+        error: function(err) {
+          reject(err);
+        }
+      });
+    });
+  }

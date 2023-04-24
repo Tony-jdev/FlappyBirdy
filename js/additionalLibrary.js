@@ -108,6 +108,22 @@ function createCheckBox(labelName, divClass, ChangeFunc)
     m_div.appendChild(checkbox);
     return m_div;
 }
+function createCheckBox(labelName, divClass, ChangeFunc, def_bool)
+{
+    let m_div = document.createElement('div');
+    m_div.className = divClass;
+    let lb = document.createElement('label');
+    lb.htmlFor = labelName;
+    lb.innerHTML = labelName;
+    let checkbox = document.createElement('input');
+    checkbox.onchange = ChangeFunc;
+    checkbox.name = labelName;
+    checkbox.type = "checkbox";
+    checkbox.checked = def_bool;
+    m_div.appendChild(lb);
+    m_div.appendChild(checkbox);
+    return m_div;
+}
 function printResults(score, h_class)
 {
     let m_div = document.createElement('div');
