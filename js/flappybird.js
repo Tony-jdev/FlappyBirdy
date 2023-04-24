@@ -47,7 +47,8 @@ window.onresize = () => {
 }
 window.onload = function () {
     board = UpdateWindow();
-
+    UpdateMenuButton();
+    
     context.fillStyle = "white";
     context.font = "25px Calibri";
     textWidth = context.measureText(presssart).width;
@@ -64,8 +65,12 @@ document.addEventListener("keypress", function (e) {
     if(e.code == "Space" && !paused){
         moveFlappy();
     }
-    else {
+    else if(!paused){
         openMenu();
+    }
+    else if(paused){
+        ClearMenu();
+        StartExecution();
     }
 });
 
@@ -137,7 +142,7 @@ function detectTouch(bird, pipe) {
 
 function moveFlappy(e) {
     if (!started) StartExecution();
-    moveupY = 11;
+    moveupY = 10;
 }
 
 //Preset functions
@@ -182,5 +187,8 @@ function ResetSession() {
 }
 function SwitchSound() {
     soundon = !soundon;
+}
+function PaintBackground(){
+    context.drawImage(backgroundImage, 0, 0, board.width, board.height);
 }
 
