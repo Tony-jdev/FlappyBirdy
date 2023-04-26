@@ -5,6 +5,8 @@ let ThisLng = languages[0];
 var audio = new Audio('music/Default.mp3');
 let AudioOn = false;
 
+let s_on = true;
+
 let wordsSet = {
     "Play":"Грати",
     "Settings":"Налаштування",
@@ -73,8 +75,8 @@ function Settings(){
     let mainDiv = document.createElement('div');
     mainDiv.className = "menu-bar";
 
-    let music = createCheckBox( GetTranslated("Music"), "cbd", ChangeAudio);
-    let sounds = createCheckBox( GetTranslated("Sounds"), "cbd", SwitchSound, true);
+    let music = createCheckBox( GetTranslated("Music"), "cbd", ChangeAudio, !audio.paused);
+    let sounds = createCheckBox( GetTranslated("Sounds"), "cbd",()=>{SwitchSound(); s_on=!s_on;}, s_on);
     let languagesDiv = createSelect(GetTranslated("Language"), "sd", languages, ChangeLng, ThisLng, "Language");
     let back = createButton(GetTranslated("Back"),"b in",openMenu);
     let s_volume = createSoundVolumeChanger('swl',GetTranslated("Sound volume"),"sw", ()=>{
